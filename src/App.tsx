@@ -3,7 +3,7 @@ import { type JSX } from "react";
 import Navbar from "./components/Navbar.tsx";
 import Sidebar from "./components/Sidebar.tsx";
 import Main from "./components/Main.tsx";
-import Player from "./components/Player.tsx";
+import Player from "./components/Player/Player.tsx";
 
 const App = (): JSX.Element => (
   <div className="flex h-screen w-full flex-col justify-between">
