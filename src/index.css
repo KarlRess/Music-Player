@@ -1,7 +1,22 @@
 @import "tailwindcss";
 
 body {
-    color: white;
-    background-color: #1f1f1f;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
+  color: white;
+  background-color: #1f1f1f;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+@theme{
+  --color-layout: #248dce;
+  --color-primary: #1f1f1f;
+  --color-surface: #333333;
+  --color-surface-secondary: #4c4c4c;
+  --color-icon: #808080;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #cccccc;
+}
+
+input::placeholder {
+  color: #cccccc;
+  opacity: 1;
 }

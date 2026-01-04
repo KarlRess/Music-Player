@@ -1,7 +1,5 @@
-import { type JSX } from "react";
-
-const Sidebar = (): JSX.Element => (
-  <aside className="h-full w-[20%] rounded-[10px] bg-[#333333]"></aside>
+const Sidebar = () => (
+  <aside className="bg-surface h-full w-[22%] rounded-[10px]"></aside>
 );
 
 export default Sidebar;

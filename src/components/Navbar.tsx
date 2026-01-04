@@ -1,24 +1,36 @@
-import { type JSX } from "react";
+import { searchIcon, historyIcon, userPict } from "./assets.ts";
 
-const Navbar = (): JSX.Element => (
-  <header className="flex h-16 w-screen items-center justify-between gap-3 bg-[#1f1f1f] px-4 py-3">
-    <div className="h-full w-10 bg-[#248DCE]">
+const Navbar = () => (
+  <header className="bg-primary flex h-16 w-screen items-center justify-between gap-3 px-4 py-3">
+    {/* App Icon */}
+    <div className="bg-layout h-full w-10">
       <div className="flex h-full w-full items-center justify-center">Icon</div>
     </div>
 
-    <div className="flex h-full w-[30%] items-center overflow-hidden rounded-full bg-[#4c4c4c]">
-      <div className="flex h-full w-[10%] items-center justify-center bg-[#248dce]">
-        <div>icon</div>
+    {/* Search Bar */}
+    <div className="bg-surface-secondary flex h-full w-[30%] items-center overflow-hidden rounded-full">
+      <div className="flex h-full items-center justify-center px-4">
+        <label htmlFor="search" className="cursor-pointer hover:opacity-75">
+          <img src={searchIcon} alt="Search icon" />
+        </label>
       </div>
 
       <input
-        className="h-full w-[90%] items-center rounded-r-full bg-[#4c4c4c] pl-2 focus:outline-none"
+        id="search"
+        className="bg-surface-secondary h-full flex-1 items-center rounded-r-full focus:outline-none"
         placeholder="What do you want to hear?"
       />
     </div>
 
-    <div className="flex h-full w-10 items-center justify-center rounded-full bg-[#248DCE]">
-      <p>Icon</p>
+    {/* Right Section */}
+    <div className="flex items-center justify-center gap-3">
+      <div className="cursor-pointer hover:opacity-75">
+        <img src={historyIcon} alt="History" />
+      </div>
+
+      <div className="bg-surface flex h-full w-10 cursor-pointer items-center justify-center rounded-full shadow-sm shadow-gray-500">
+        <img src={userPict} alt="User Pict" className="h-full w-full" />
+      </div>
     </div>
   </header>
 );

@@ -7,7 +7,7 @@ import {
 } from "./assets.ts";
 
 const middle_section = () => (
-  <div className="flex h-full flex-1 items-center justify-center gap-5 bg-[#1f1f1f]">
+  <div className="flex h-full flex-1 items-center justify-center gap-5">
     {/* Shuffle Button */}
     <div className="cursor-pointer hover:opacity-80">
       <img src={shuffleIcon} alt={"Shuffle button"} />
