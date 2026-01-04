@@ -1,9 +1,7 @@
-import {type JSX} from "react";
+import { type JSX } from "react";
 
 const Sidebar = (): JSX.Element => (
-  <aside className="h-full w-[20%] bg-[#333333] rounded-[10px]">
-
-  </aside>
-)
+  <aside className="h-full w-[20%] rounded-[10px] bg-[#333333]"></aside>
+);
 
 export default Sidebar;
