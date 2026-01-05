@@ -1,38 +1,52 @@
+import { useState } from "react";
+
 import {
-  nextIcon,
-  pauseIcon,
-  prevIcon,
-  repeatIcon,
   shuffleIcon,
+  prevIcon,
+  pauseIcon,
+  playIcon,
+  nextIcon,
+  repeatIcon,
 } from "./assets.ts";
 
-const middle_section = () => (
-  <div className="flex h-full flex-1 items-center justify-center gap-5">
-    {/* Shuffle Button */}
-    <div className="cursor-pointer hover:opacity-80">
-      <img src={shuffleIcon} alt={"Shuffle button"} />
-    </div>
+const Middle_Section = () => {
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
-    {/* Previous Button */}
-    <div className="cursor-pointer hover:opacity-80">
-      <img src={prevIcon} alt={"Previous button"} />
-    </div>
+  const playHandle = (): void => {
+    setIsPlaying(!isPlaying);
+  };
 
-    {/* Play/Pause Button */}
-    <div className="w flex h-18 w-18 cursor-pointer items-center justify-center rounded-full bg-white hover:opacity-80">
-      <img src={pauseIcon} alt={"Pause button"} />
-    </div>
+  return (
+    <div className="flex h-full flex-1 items-center justify-center gap-5">
+      {/* Shuffle Button */}
+      <div className="cursor-pointer hover:opacity-80">
+        <img src={shuffleIcon} alt={"Shuffle button"} />
+      </div>
 
-    {/* Next Button */}
-    <div className="cursor-pointer hover:opacity-80">
-      <img src={nextIcon} alt={"Next button"} />
-    </div>
+      {/* Previous Button */}
+      <div className="cursor-pointer hover:opacity-80">
+        <img src={prevIcon} alt={"Previous button"} />
+      </div>
 
-    {/* Repeat Button */}
-    <div className="cursor-pointer hover:opacity-80">
-      <img src={repeatIcon} alt={"Repeat button"} />
-    </div>
-  </div>
-);
+      {/* Play/Pause Button */}
+      <div
+        className="w flex h-18 w-18 cursor-pointer items-center justify-center rounded-full bg-white hover:opacity-80"
+        onClick={playHandle}
+      >
+        <img src={isPlaying ? pauseIcon : playIcon} alt={"Pause button"} />
+      </div>
 
-export default middle_section;
+      {/* Next Button */}
+      <div className="cursor-pointer hover:opacity-80">
+        <img src={nextIcon} alt={"Next button"} />
+      </div>
+
+      {/* Repeat Button */}
+      <div className="cursor-pointer hover:opacity-80">
+        <img src={repeatIcon} alt={"Repeat button"} />
+      </div>
+    </div>
+  );
+};
+
+export default Middle_Section;

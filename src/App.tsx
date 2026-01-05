@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar.tsx";
 import Sidebar from "./components/Sidebar.tsx";
 import Main from "./components/Main.tsx";
 import Player from "./components/Player/Player.tsx";
+import Progress_Bar from "./components/Player/Progress_Bar.tsx";
 
 const App = (): JSX.Element => (
   <div className="flex h-screen w-full flex-col justify-between">
@@ -14,6 +15,7 @@ const App = (): JSX.Element => (
       <Main />
     </div>
 
+    <Progress_Bar />
     <Player />
   </div>
 );

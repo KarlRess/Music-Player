@@ -1,7 +1,7 @@
 import { volumeIcon } from "./assets.ts";
 
 const Right_Section = () => (
-  <div className="bg-primary flex h-full w-[19%] items-center justify-end gap-1 pr-2">
+  <div className="flex h-full w-[19%] items-center justify-end gap-1 pr-2">
     {/* Volume Icon */}
     <div className="cursor-pointer">
       <img src={volumeIcon} alt={"Volume button"} />
