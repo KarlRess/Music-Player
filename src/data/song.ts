@@ -1,4 +1,4 @@
-interface Data {
+export interface Song {
   id: number;
   name: string;
   artist: string[];
@@ -10,7 +10,7 @@ interface Data {
   smallPict: string;
 }
 
-const song: Data[] = [
+export const song: Song[] = [
   {
     id: 1,
     name: "a lot",
@@ -69,5 +69,3 @@ const song: Data[] = [
     smallPict: "song5Small",
   },
 ];
-
-export default song;

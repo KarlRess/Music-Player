@@ -2,7 +2,7 @@ import { type JSX } from "react";
 
 import Navbar from "./components/Navbar.tsx";
 import Sidebar from "./components/Sidebar.tsx";
-import Main from "./components/Main.tsx";
+import Main from "./components/Main/Main.tsx";
 import Player from "./components/Player/Player.tsx";
 import Progress_Bar from "./components/Player/Progress_Bar.tsx";
 
