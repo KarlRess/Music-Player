@@ -1,7 +1,7 @@
 import { searchIcon, historyIcon, userPict } from "./assets.ts";
 
 const Navbar = () => (
-  <header className="bg-primary flex h-16 w-screen items-center justify-between gap-3 px-4 py-3">
+  <header className="bg-primary flex h-16 w-full items-center justify-between gap-3 px-4 py-3">
     {/* App Icon */}
     <div className="bg-layout h-full w-10">
       <div className="flex h-full w-full items-center justify-center">Icon</div>
