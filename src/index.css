@@ -1,12 +1,14 @@
 @import "tailwindcss";
 
+@plugin "tailwind-scrollbar";
+
 body {
   color: white;
   background-color: #1f1f1f;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-@theme{
+@theme {
   --color-layout: #248dce;
   --color-primary: #1f1f1f;
   --color-surface: #333333;
@@ -21,13 +23,31 @@ input::placeholder {
   opacity: 1;
 }
 
-.scroll-text {
-  white-space: nowrap;
-  overflow: hidden;
-  animation: scroll 10s linear infinite;
+@keyframes scroll {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
 }
 
-@keyframes scroll {
-  0% { transform: translateX(100%); }
-  100% { transform: translateX(-100%); }
+.scrollbar::-webkit-scrollbar {
+  width: 0;
+}
+
+.scrollbar:hover::-webkit-scrollbar {
+  width: 10px;
+  background-color: rgba(128, 128, 128, 0.76);
+  border-radius: 3px;
+}
+
+.scrollbar:hover::-webkit-scrollbar-thumb {
+  width: 10px;
+  border-radius: 3px;
+}
+
+
+.scrollbar-y{
+  @apply scrollbar-thumb-gray-300 overflow-y-auto;
 }
