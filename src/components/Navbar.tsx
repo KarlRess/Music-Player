@@ -8,7 +8,7 @@ const Navbar = () => (
     </div>
 
     {/* Search Bar */}
-    <div className="bg-surface-secondary flex h-full w-[30%] items-center overflow-hidden rounded-full">
+    <div className="bg-surface-secondary hover:border-layout border-surface-secondary flex h-full w-[30%] items-center overflow-hidden rounded-full border hover:border">
       <div className="flex h-full items-center justify-center px-4">
         <label htmlFor="search" className="cursor-pointer hover:opacity-75">
           <img src={searchIcon} alt="Search icon" />
@@ -28,8 +28,12 @@ const Navbar = () => (
         <img src={historyIcon} alt="History" />
       </div>
 
-      <div className="bg-surface flex h-full w-10 cursor-pointer items-center justify-center rounded-full shadow-sm shadow-gray-500">
-        <img src={userPict} alt="User Pict" className="h-full w-full" />
+      <div className="flex h-full w-10 cursor-pointer items-center justify-center rounded-full p-1 transition-all duration-200 hover:p-0">
+        <img
+          src={userPict}
+          alt="User Pict"
+          className="h-full w-full object-cover"
+        />
       </div>
     </div>
   </header>

@@ -6,7 +6,7 @@ const Category = ({ category, song }: { category: string; song: Song[] }) => {
     <div className="flex flex-col gap-3">
       <p className="text-xl font-semibold">{category}</p>
 
-      <div className="flex items-center gap-5 overflow-hidden pl-3">
+      <div className="flex items-start overflow-hidden pl-3">
         {/* Music Card */}
         {song.map((s) => (
           <SongCard key={s.id} song={s} />
