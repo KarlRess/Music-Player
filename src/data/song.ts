@@ -10,7 +10,7 @@ export interface Song {
   smallPict: string;
 }
 
-const testblues: Song[] = [
+const testBlues: Song[] = [
   {
     id: 7,
     name: "This is just a test",
@@ -167,8 +167,6 @@ const testPop: Song[] = [
 ];
 
 export const song: Song[] = [
-  ...testblues,
-  ...testPop,
   {
     id: 1,
     name: "a lot",
@@ -226,4 +224,6 @@ export const song: Song[] = [
     bigPict: "song5Big",
     smallPict: "song5Small",
   },
+  ...testBlues,
+  ...testPop,
 ];

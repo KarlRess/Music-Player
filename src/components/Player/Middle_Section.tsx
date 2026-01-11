@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import {
   shuffleIcon,
   prevIcon,
@@ -8,13 +6,10 @@ import {
   nextIcon,
   repeatIcon,
 } from "./assets.ts";
+import { usePlayerContext } from "../../context/PlayerContext.tsx";
 
 const Middle_Section = () => {
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
-
-  const playHandle = (): void => {
-    setIsPlaying(!isPlaying);
-  };
+  const { isPlaying, playPause } = usePlayerContext();
 
   return (
     <div className="flex h-full flex-1 items-center justify-center gap-5">
@@ -31,7 +26,7 @@ const Middle_Section = () => {
       {/* Play/Pause Button */}
       <div
         className="w flex h-18 w-18 cursor-pointer items-center justify-center rounded-full bg-white hover:opacity-80"
-        onClick={playHandle}
+        onClick={playPause}
       >
         <img src={isPlaying ? pauseIcon : playIcon} alt={"Pause button"} />
       </div>

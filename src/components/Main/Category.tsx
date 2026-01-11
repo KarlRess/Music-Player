@@ -5,7 +5,7 @@ import { useRef } from "react";
 const Category = ({ category, song }: { category: string; song: Song[] }) => {
   const track = useRef<HTMLDivElement | null>(null);
 
-  const handleScroll = (direction: "left" | "right") => {
+  const handleScroll = (direction: "left" | "right"): void => {
     const el = track.current;
     if (!el) return;
 
@@ -23,14 +23,12 @@ const Category = ({ category, song }: { category: string; song: Song[] }) => {
         {/* Carousel Button */}
         <div className="bg-layout flex h-full items-center gap-1 p-1 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
           <button
-            aria-label="scroll-left"
             onClick={() => handleScroll("left")}
             className="bg-surface-secondary flex h-6 w-6 cursor-pointer items-center justify-center rounded-full"
           >
             L
           </button>
           <button
-            aria-label="scroll-right"
             onClick={() => handleScroll("right")}
             className="bg-surface-secondary flex h-6 w-6 cursor-pointer items-center justify-center rounded-full"
           >
