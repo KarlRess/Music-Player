@@ -32,6 +32,15 @@ input::placeholder {
   }
 }
 
+@keyframes scrollText {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
 .scrollbar::-webkit-scrollbar {
   width: 0;
 }
@@ -47,7 +56,6 @@ input::placeholder {
   border-radius: 3px;
 }
 
-
-.scrollbar-y{
+.scrollbar-y {
   @apply scrollbar-thumb-gray-300 overflow-y-auto;
 }
