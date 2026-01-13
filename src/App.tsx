@@ -3,10 +3,9 @@ import Sidebar from "./components/Sidebar.tsx";
 import Main from "./components/Main/Main.tsx";
 import Player from "./components/Player/Player.tsx";
 import { usePlayerContext } from "./context/PlayerContext.tsx";
-import { song } from "./data/song.ts";
 
 const App = () => {
-  const { audioRef } = usePlayerContext();
+  const { track, audioRef, isLooping } = usePlayerContext();
 
   return (
     <div className="flex h-screen flex-col">
@@ -18,11 +17,9 @@ const App = () => {
       </div>
 
       <Player />
-      <audio
-        ref={audioRef}
-        src={`/assets/songs/${song[0].source}.mp3`}
-        preload="auto"
-      ></audio>
+      <audio ref={audioRef} preload="auto" loop={isLooping}>
+        <source src={`/assets/songs/${track.source}.mp3`} type="audio/mp3" />
+      </audio>
     </div>
   );
 };
