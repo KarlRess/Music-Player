@@ -42,6 +42,7 @@ const PlayerProvider = (props: PropsWithChildren) => {
 
   const prev = (): void => {
     setSongIndex((prev) => (prev + song.length - 1) % song.length);
+    setIsPlaying(true);
   };
 
   const next = (): void => {
@@ -49,10 +50,24 @@ const PlayerProvider = (props: PropsWithChildren) => {
       console.log("shuffle");
     } else {
       setSongIndex((prev) => (prev + song.length + 1) % song.length);
+      setIsPlaying(true);
     }
   };
 
-  // Update Current Time Song
+  // Update Track Source
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    audio.src = `/assets/songs/${track.source}.mp3`;
+    audio.load();
+
+    // if (isPlaying) {
+    audio?.play();
+    // }
+  }, [isPlaying, track]);
+
+  // Update Current Time Song And Seek Bar
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
