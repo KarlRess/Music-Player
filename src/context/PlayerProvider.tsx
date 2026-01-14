@@ -62,10 +62,22 @@ const PlayerProvider = (props: PropsWithChildren) => {
     audio.src = `/assets/songs/${track.source}.mp3`;
     audio.load();
 
-    // if (isPlaying) {
-    audio?.play();
-    // }
-  }, [isPlaying, track]);
+    if (isPlaying) {
+      audio.play();
+    }
+  }, [track]);
+
+  // Update Play and Pause
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    if (isPlaying) {
+      audio.play();
+    } else {
+      audio.pause();
+    }
+  }, [isPlaying]);
 
   // Update Current Time Song And Seek Bar
   useEffect(() => {
