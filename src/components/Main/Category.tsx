@@ -16,9 +16,9 @@ const Category = ({ category, song }: { category: string; song: Song[] }) => {
   };
 
   return (
-    <div className="group flex flex-col gap-3">
+    <div className="group flex flex-col gap-1">
       <div className="flex items-center justify-between pr-2">
-        <div className="text-xl font-semibold">{category}</div>
+        <div className="pl-7 text-xl font-semibold">{category}</div>
 
         {/* Carousel Button */}
         <div className="bg-layout flex h-full items-center gap-1 p-1 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
@@ -37,7 +37,7 @@ const Category = ({ category, song }: { category: string; song: Song[] }) => {
         </div>
       </div>
 
-      <div className="flex items-start overflow-hidden pl-3" ref={track}>
+      <div className="flex items-start overflow-hidden pl-5" ref={track}>
         {/* Music Card */}
         {song.map((s) => (
           <SongCard key={s.id} song={s} />
