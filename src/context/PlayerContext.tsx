@@ -1,5 +1,6 @@
 import { createContext, useContext, type RefObject } from "react";
 import type { Song } from "../data/song.ts";
+import * as React from "react";
 
 export type Time = {
   currentTime: { sec: number; min: number };
@@ -7,8 +8,10 @@ export type Time = {
 };
 
 interface PlayerContextType {
-  track: Song;
   audioRef: RefObject<HTMLAudioElement | null>;
+  seekContainerRef: RefObject<HTMLDivElement | null>;
+  seekBarRef: RefObject<HTMLDivElement | null>;
+  track: Song;
   isPlaying: boolean;
   isShuffled: boolean;
   isLooping: boolean;
@@ -18,6 +21,7 @@ interface PlayerContextType {
   loopToggle: () => void;
   prev: () => void;
   next: () => void;
+  seekSong: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
 export const PlayerContext = createContext<PlayerContextType | null>(null);

@@ -5,13 +5,15 @@ import Progress_Bar from "./Progress_Bar.tsx";
 
 const Player = () => {
   return (
-    <footer className="fixed bottom-0 z-10 w-full flex-col">
-      <Progress_Bar />
+    <footer className="fixed bottom-0 z-10 flex w-full">
+      <div className="relative flex w-full flex-col">
+        <Progress_Bar />
 
-      <div className="bg-primary flex h-21 items-center justify-between px-4">
-        <Left_Section />
-        <Middle_Section />
-        <Right_Section />
+        <div className="bg-primary flex h-21 items-center justify-between px-4">
+          <Left_Section />
+          <Middle_Section />
+          <Right_Section />
+        </div>
       </div>
     </footer>
   );

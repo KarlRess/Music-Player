@@ -1,9 +1,12 @@
 import { PlayerContext, type Time } from "./PlayerContext.tsx";
 import { type PropsWithChildren, useEffect, useRef, useState } from "react";
 import { type Song, song } from "../data/song.ts";
+import * as React from "react";
 
 const PlayerProvider = (props: PropsWithChildren) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const seekContainerRef = useRef<HTMLDivElement | null>(null);
+  const seekBarRef = useRef<HTMLDivElement | null>(null);
 
   const [songIndex, setSongIndex] = useState<number>(0);
   const track: Song = song[songIndex];
@@ -54,6 +57,18 @@ const PlayerProvider = (props: PropsWithChildren) => {
     }
   };
 
+  const seekSong = (e: React.MouseEvent<HTMLDivElement>): void => {
+    const container = seekContainerRef.current;
+    const audio = audioRef.current;
+    if (!audio || !container) return;
+
+    const rect = container.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const percent = clickX / rect.width;
+
+    audio.currentTime = percent * audio.duration;
+  };
+
   // Update Track Source
   useEffect(() => {
     const audio = audioRef.current;
@@ -82,11 +97,14 @@ const PlayerProvider = (props: PropsWithChildren) => {
   // Update Current Time Song And Seek Bar
   useEffect(() => {
     const audio = audioRef.current;
-    if (!audio) return;
+    const seekBar = seekBarRef.current;
+    if (!audio || !seekBar) return;
 
     const handleTimeUpdate = () => {
       const current = audio.currentTime;
       const duration = isNaN(audio.duration) ? 0 : audio.duration;
+
+      seekBar.style.width = `${(current / duration) * 100}%`;
 
       setTime({
         currentTime: {
@@ -129,6 +147,8 @@ const PlayerProvider = (props: PropsWithChildren) => {
   const contextValue = {
     track,
     audioRef,
+    seekContainerRef,
+    seekBarRef,
     isPlaying,
     isShuffled,
     isLooping,
@@ -138,6 +158,7 @@ const PlayerProvider = (props: PropsWithChildren) => {
     loopToggle,
     prev,
     next,
+    seekSong,
   };
 
   return (

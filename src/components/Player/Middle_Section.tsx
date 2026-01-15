@@ -23,7 +23,7 @@ const Middle_Section = () => {
   } = usePlayerContext();
 
   return (
-    <div className="flex h-full flex-1 items-center justify-center gap-5">
+    <div className="flex h-full flex-1 items-center justify-center gap-5 py-4">
       {/* Shuffle Button */}
       <div className="cursor-pointer hover:opacity-80" onClick={shuffleToggle}>
         <img
@@ -39,7 +39,7 @@ const Middle_Section = () => {
 
       {/* Play/Pause Button */}
       <div
-        className="w flex h-18 w-18 cursor-pointer items-center justify-center rounded-full bg-white hover:opacity-80"
+        className="flex h-14 w-14 cursor-pointer items-center justify-center rounded-full bg-white hover:opacity-80"
         onClick={playPause}
       >
         <img
