@@ -22,6 +22,12 @@ const Middle_Section = () => {
     next,
   } = usePlayerContext();
 
+  const playButtonStyle =
+    "flex h-14 w-14 cursor-pointer items-center justify-center pl-0.5 rounded-full bg-white hover:opacity-80";
+
+  const pauseButtonStyle =
+    "flex h-14 w-14 cursor-pointer items-center justify-center rounded-full bg-white hover:opacity-80";
+
   return (
     <div className="flex h-full flex-1 items-center justify-center gap-5 py-4">
       {/* Shuffle Button */}
@@ -39,7 +45,7 @@ const Middle_Section = () => {
 
       {/* Play/Pause Button */}
       <div
-        className="flex h-14 w-14 cursor-pointer items-center justify-center rounded-full bg-white hover:opacity-80"
+        className={isPlaying ? pauseButtonStyle : playButtonStyle}
         onClick={playPause}
       >
         <img
