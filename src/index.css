@@ -18,6 +18,10 @@ body {
   --color-text-secondary: #cccccc;
 }
 
+.flex-center {
+  @apply flex  justify-center items-center;
+}
+
 input::placeholder {
   color: #cccccc;
   opacity: 1;

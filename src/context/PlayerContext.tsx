@@ -12,6 +12,7 @@ interface PlayerContextType {
   seekContainerRef: RefObject<HTMLDivElement | null>;
   seekBarRef: RefObject<HTMLDivElement | null>;
   track: Song;
+  selectSong: (index: number) => void;
   isPlaying: boolean;
   isShuffled: boolean;
   isLooping: boolean;

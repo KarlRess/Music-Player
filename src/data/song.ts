@@ -227,3 +227,11 @@ export const song: Song[] = [
   ...testBlues,
   ...testPop,
 ];
+
+const songMap = new Map();
+
+song.forEach((song) => songMap.set(song.id, song));
+
+export const getSongById = (id: number) => songMap.get(id);
+
+console.log(getSongById(1));

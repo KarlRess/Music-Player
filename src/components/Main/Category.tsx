@@ -24,13 +24,13 @@ const Category = ({ category, song }: { category: string; song: Song[] }) => {
         <div className="bg-layout flex h-full items-center gap-1 p-1 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
           <button
             onClick={() => handleScroll("left")}
-            className="bg-surface-secondary flex h-6 w-6 cursor-pointer items-center justify-center rounded-full"
+            className="bg-surface-secondary flex-center h-6 w-6 cursor-pointer rounded-full"
           >
             L
           </button>
           <button
             onClick={() => handleScroll("right")}
-            className="bg-surface-secondary flex h-6 w-6 cursor-pointer items-center justify-center rounded-full"
+            className="bg-surface-secondary flex-center h-6 w-6 cursor-pointer rounded-full"
           >
             R
           </button>
@@ -39,8 +39,8 @@ const Category = ({ category, song }: { category: string; song: Song[] }) => {
 
       <div className="flex items-start overflow-hidden pl-5" ref={track}>
         {/* Music Card */}
-        {song.map((s) => (
-          <SongCard key={s.id} song={s} />
+        {song.map((s, i) => (
+          <SongCard key={s.id} song={s} index={i} />
         ))}
       </div>
     </div>

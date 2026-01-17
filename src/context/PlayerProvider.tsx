@@ -20,14 +20,12 @@ const PlayerProvider = (props: PropsWithChildren) => {
     totalTime: { sec: 0, min: 0 },
   });
 
-  const playPause = (): void => {
-    if (isPlaying) {
-      audioRef.current?.pause();
-    } else {
-      audioRef.current?.play();
-    }
-    setIsPlaying((prev) => !prev);
+  const selectSong = (index: number): void => {
+    setSongIndex(index);
+    setIsPlaying(true);
   };
+
+  const playPause = (): void => setIsPlaying((prev) => !prev);
 
   const shuffleToggle = (): void => {
     if (isLooping) {
@@ -77,9 +75,7 @@ const PlayerProvider = (props: PropsWithChildren) => {
     audio.src = `/assets/songs/${track.source}.mp3`;
     audio.load();
 
-    if (isPlaying) {
-      audio.play();
-    }
+    audio.play();
   }, [track]);
 
   // Update Play and Pause
@@ -153,6 +149,7 @@ const PlayerProvider = (props: PropsWithChildren) => {
     isShuffled,
     isLooping,
     time,
+    selectSong,
     playPause,
     shuffleToggle,
     loopToggle,
