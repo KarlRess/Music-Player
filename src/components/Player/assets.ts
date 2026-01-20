@@ -7,6 +7,8 @@ import isShuffle from "../../assets/Icons/active_shuffle_icon.svg";
 import repeat from "../../assets/Icons/repeat_icon.svg";
 import isRepeat from "../../assets/Icons/active_repeat_icon.svg";
 import volume from "../../assets/Icons/volume_icon.svg";
+import mute from "../../assets/Icons/mute_volume_icon.svg";
+import halfVolume from "../../assets/Icons/half_volume_icon.svg";
 
 export const nextIcon = next;
 export const pauseIcon = pause;
@@ -17,3 +19,5 @@ export const activeShuffleIcon = isShuffle;
 export const repeatIcon = repeat;
 export const activeRepeatIcon = isRepeat;
 export const volumeIcon = volume;
+export const muteIcon = mute;
+export const halfVolumeIcon = halfVolume;

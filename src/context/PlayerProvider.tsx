@@ -7,13 +7,17 @@ const PlayerProvider = (props: PropsWithChildren) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const seekContainerRef = useRef<HTMLDivElement | null>(null);
   const seekBarRef = useRef<HTMLDivElement | null>(null);
+  const volumeContainerRef = useRef<HTMLDivElement | null>(null);
+  const volumeBarRef = useRef<HTMLDivElement | null>(null);
 
   const [songIndex, setSongIndex] = useState<number>(0);
   const track: Song = song[songIndex];
+  const [volumeNum, setVolumeNum] = useState<number>(0.45);
 
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [isShuffled, setIsShuffled] = useState<boolean>(false);
   const [isLooping, setIsLooping] = useState<boolean>(false);
+  const [isMuted, setIsMute] = useState<boolean>(false);
 
   const [time, setTime] = useState<Time>({
     currentTime: { sec: 0, min: 0 },
@@ -55,6 +59,22 @@ const PlayerProvider = (props: PropsWithChildren) => {
     }
   };
 
+  const muteVolume = (): void => setIsMute((prev) => !prev);
+
+  const setVolume = (e: React.MouseEvent<HTMLDivElement>): void => {
+    const container = volumeContainerRef.current;
+    const audio = audioRef.current;
+    if (!container || !audio) return;
+
+    const rect = container.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const percent = clickX / rect.width;
+
+    audio.volume = percent;
+    setVolumeNum(percent);
+    setIsMute(false);
+  };
+
   const seekSong = (e: React.MouseEvent<HTMLDivElement>): void => {
     const container = seekContainerRef.current;
     const audio = audioRef.current;
@@ -89,6 +109,21 @@ const PlayerProvider = (props: PropsWithChildren) => {
       audio.pause();
     }
   }, [isPlaying]);
+
+  // Update Mute Volume and Volume progress bar
+  useEffect(() => {
+    const audio = audioRef.current;
+    const bar = volumeBarRef.current;
+    if (!audio || !bar) return;
+
+    if (isMuted) {
+      audio.volume = 0;
+      bar.style.width = 0 + "%";
+    } else {
+      audio.volume = volumeNum;
+      bar.style.width = volumeNum * 100 + "%";
+    }
+  }, [isMuted, volumeNum]);
 
   // Update Current Time Song And Seek Bar
   useEffect(() => {
@@ -144,10 +179,14 @@ const PlayerProvider = (props: PropsWithChildren) => {
     track,
     audioRef,
     seekContainerRef,
+    volumeContainerRef,
+    volumeBarRef,
     seekBarRef,
     isPlaying,
     isShuffled,
     isLooping,
+    isMuted,
+    volumeNum,
     time,
     selectSong,
     playPause,
@@ -155,6 +194,8 @@ const PlayerProvider = (props: PropsWithChildren) => {
     loopToggle,
     prev,
     next,
+    setVolume,
+    muteVolume,
     seekSong,
   };
 
