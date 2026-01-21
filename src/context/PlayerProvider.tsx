@@ -10,14 +10,15 @@ const PlayerProvider = (props: PropsWithChildren) => {
   const volumeContainerRef = useRef<HTMLDivElement | null>(null);
   const volumeBarRef = useRef<HTMLDivElement | null>(null);
 
-  const [songIndex, setSongIndex] = useState<number>(0);
+  const [songIndex, setSongIndex] = useState<number>(5);
   const track: Song = song[songIndex];
-  const [volumeNum, setVolumeNum] = useState<number>(0.45);
+  const [volume, setVolume] = useState<number>(0.45);
 
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [isShuffled, setIsShuffled] = useState<boolean>(false);
   const [isLooping, setIsLooping] = useState<boolean>(false);
   const [isMuted, setIsMute] = useState<boolean>(false);
+  const [isSeekingSong, setIsSeekingSong] = useState(false);
 
   const [time, setTime] = useState<Time>({
     currentTime: { sec: 0, min: 0 },
@@ -61,28 +62,42 @@ const PlayerProvider = (props: PropsWithChildren) => {
 
   const muteVolume = (): void => setIsMute((prev) => !prev);
 
-  const setVolume = (e: React.MouseEvent<HTMLDivElement>): void => {
+  const seekVolume = (e: React.MouseEvent<HTMLDivElement>): void => {
     const container = volumeContainerRef.current;
     const audio = audioRef.current;
     if (!container || !audio) return;
 
     const rect = container.getBoundingClientRect();
     const clickX = e.clientX - rect.left;
-    const percent = clickX / rect.width;
+    const percent = Math.min(Math.max(clickX / rect.width, 0), 1);
 
     audio.volume = percent;
-    setVolumeNum(percent);
+    setVolume(percent);
     setIsMute(false);
   };
 
-  const seekSong = (e: React.MouseEvent<HTMLDivElement>): void => {
+  const onSeekStartSong = (e: React.MouseEvent<HTMLDivElement>) => {
+    setIsSeekingSong(true);
+    seekSong(e.clientX);
+  };
+
+  const onSeekMoveSong = (e: MouseEvent) => {
+    if (!isSeekingSong) return;
+    seekSong(e.clientX);
+  };
+
+  const onSeekEndSong = () => {
+    setIsSeekingSong(false);
+  };
+
+  const seekSong = (clientX: number): void => {
     const container = seekContainerRef.current;
     const audio = audioRef.current;
     if (!audio || !container) return;
 
     const rect = container.getBoundingClientRect();
-    const clickX = e.clientX - rect.left;
-    const percent = clickX / rect.width;
+    const clickX = clientX - rect.left;
+    const percent = Math.min(Math.max(clickX / rect.width, 0), 1);
 
     audio.currentTime = percent * audio.duration;
   };
@@ -120,10 +135,22 @@ const PlayerProvider = (props: PropsWithChildren) => {
       audio.volume = 0;
       bar.style.width = 0 + "%";
     } else {
-      audio.volume = volumeNum;
-      bar.style.width = volumeNum * 100 + "%";
+      audio.volume = volume;
+      bar.style.width = volume * 100 + "%";
     }
-  }, [isMuted, volumeNum]);
+  }, [isMuted, volume]);
+
+  // Drag seek song
+  useEffect(() => {
+    if (!isSeekingSong) return;
+    window.addEventListener("mousemove", onSeekMoveSong);
+    window.addEventListener("mouseup", onSeekEndSong);
+
+    return () => {
+      window.removeEventListener("mousemove", onSeekMoveSong);
+      window.removeEventListener("mouseup", onSeekEndSong);
+    };
+  }, [isSeekingSong]);
 
   // Update Current Time Song And Seek Bar
   useEffect(() => {
@@ -186,7 +213,7 @@ const PlayerProvider = (props: PropsWithChildren) => {
     isShuffled,
     isLooping,
     isMuted,
-    volumeNum,
+    volume,
     time,
     selectSong,
     playPause,
@@ -194,9 +221,9 @@ const PlayerProvider = (props: PropsWithChildren) => {
     loopToggle,
     prev,
     next,
-    setVolume,
+    seekVolume,
     muteVolume,
-    seekSong,
+    onSeekStartSong,
   };
 
   return (

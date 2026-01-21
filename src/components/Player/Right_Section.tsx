@@ -6,8 +6,8 @@ const Right_Section = () => {
     isMuted,
     volumeContainerRef,
     volumeBarRef,
-    volumeNum,
-    setVolume,
+    volume,
+    seekVolume,
     muteVolume,
   } = usePlayerContext();
 
@@ -19,9 +19,7 @@ const Right_Section = () => {
         onClick={muteVolume}
       >
         <img
-          src={
-            isMuted ? muteIcon : volumeNum > 0.5 ? volumeIcon : halfVolumeIcon
-          }
+          src={isMuted ? muteIcon : volume > 0.5 ? volumeIcon : halfVolumeIcon}
           alt={"Volume button"}
         />
       </div>
@@ -30,7 +28,7 @@ const Right_Section = () => {
       <div
         className="flex-center group/volume h-5 w-22.5 cursor-pointer overflow-hidden"
         ref={volumeContainerRef}
-        onClick={setVolume}
+        onClick={seekVolume}
       >
         <div className="bg-icon h-1 w-full rounded-full">
           <div

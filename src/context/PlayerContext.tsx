@@ -19,21 +19,21 @@ interface PlayerContextType {
   isShuffled: boolean;
   isLooping: boolean;
   isMuted: boolean;
-  volumeNum: number;
+  volume: number;
   selectSong: (index: number) => void;
-  setVolume: (e: React.MouseEvent<HTMLDivElement>) => void;
   muteVolume: () => void;
   playPause: () => void;
   shuffleToggle: () => void;
   loopToggle: () => void;
   prev: () => void;
   next: () => void;
-  seekSong: (e: React.MouseEvent<HTMLDivElement>) => void;
+  onSeekStartSong: (e: React.MouseEvent<HTMLDivElement>) => void;
+  seekVolume: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
 export const PlayerContext = createContext<PlayerContextType | null>(null);
 
-export const usePlayerContext = () => {
+export const usePlayerContext = (): PlayerContextType => {
   const context = useContext(PlayerContext);
 
   if (!context)

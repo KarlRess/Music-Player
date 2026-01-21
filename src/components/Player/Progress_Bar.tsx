@@ -1,13 +1,13 @@
 import { usePlayerContext } from "../../context/PlayerContext.tsx";
 
 const Progress_Bar = () => {
-  const { seekContainerRef, seekBarRef, seekSong } = usePlayerContext();
+  const { seekContainerRef, seekBarRef, onSeekStartSong } = usePlayerContext();
 
   return (
     <div
-      className="group absolute -top-4 flex h-8 w-full cursor-pointer items-center justify-center"
+      className="group absolute -top-4 flex h-8 w-full cursor-pointer items-center justify-center active:cursor-grabbing"
       ref={seekContainerRef}
-      onClick={seekSong}
+      onMouseDown={onSeekStartSong}
     >
       <div className="h-0.5 w-full bg-[#b3b3b3] transition-all duration-100 group-hover:h-1">
         <div
