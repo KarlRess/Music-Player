@@ -28,7 +28,7 @@ interface PlayerContextType {
   prev: () => void;
   next: () => void;
   onSeekStartSong: (e: React.MouseEvent<HTMLDivElement>) => void;
-  seekVolume: (e: React.MouseEvent<HTMLDivElement>) => void;
+  onSeekStartVolume: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
 export const PlayerContext = createContext<PlayerContextType | null>(null);

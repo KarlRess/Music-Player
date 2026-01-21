@@ -12,13 +12,14 @@ const PlayerProvider = (props: PropsWithChildren) => {
 
   const [songIndex, setSongIndex] = useState<number>(5);
   const track: Song = song[songIndex];
-  const [volume, setVolume] = useState<number>(0.45);
+  const [volume, setVolume] = useState<number>(0.7);
 
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [isShuffled, setIsShuffled] = useState<boolean>(false);
   const [isLooping, setIsLooping] = useState<boolean>(false);
   const [isMuted, setIsMute] = useState<boolean>(false);
-  const [isSeekingSong, setIsSeekingSong] = useState(false);
+  const [isSeekingVolume, setIsSeekingVolume] = useState<boolean>(false);
+  const [isSeekingSong, setIsSeekingSong] = useState<boolean>(false);
 
   const [time, setTime] = useState<Time>({
     currentTime: { sec: 0, min: 0 },
@@ -62,18 +63,37 @@ const PlayerProvider = (props: PropsWithChildren) => {
 
   const muteVolume = (): void => setIsMute((prev) => !prev);
 
-  const seekVolume = (e: React.MouseEvent<HTMLDivElement>): void => {
+  const onSeekStartVolume = (e: React.MouseEvent<HTMLDivElement>) => {
+    setIsSeekingVolume(true);
+    seekVolume(e.clientX);
+  };
+
+  const onSeekMoveVolume = (e: MouseEvent) => {
+    if (!isSeekingVolume) return;
+    seekVolume(e.clientX);
+  };
+
+  const onSeekEndVolume = () => {
+    setIsSeekingVolume(false);
+  };
+
+  const seekVolume = (clientX: number): void => {
     const container = volumeContainerRef.current;
     const audio = audioRef.current;
     if (!container || !audio) return;
 
     const rect = container.getBoundingClientRect();
-    const clickX = e.clientX - rect.left;
+    const clickX = clientX - rect.left;
     const percent = Math.min(Math.max(clickX / rect.width, 0), 1);
+
+    if (percent === 0) {
+      setIsMute(true);
+    } else {
+      setIsMute(false);
+    }
 
     audio.volume = percent;
     setVolume(percent);
-    setIsMute(false);
   };
 
   const onSeekStartSong = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -124,6 +144,18 @@ const PlayerProvider = (props: PropsWithChildren) => {
       audio.pause();
     }
   }, [isPlaying]);
+
+  // Drag seek volume
+  useEffect(() => {
+    if (!isSeekingVolume) return;
+    window.addEventListener("mousemove", onSeekMoveVolume);
+    window.addEventListener("mouseup", onSeekEndVolume);
+
+    return () => {
+      window.removeEventListener("mousemove", onSeekMoveVolume);
+      window.removeEventListener("mouseup", onSeekEndVolume);
+    };
+  }, [isSeekingVolume]);
 
   // Update Mute Volume and Volume progress bar
   useEffect(() => {
@@ -221,8 +253,8 @@ const PlayerProvider = (props: PropsWithChildren) => {
     loopToggle,
     prev,
     next,
-    seekVolume,
     muteVolume,
+    onSeekStartVolume,
     onSeekStartSong,
   };
 
