@@ -135,8 +135,8 @@ const PlayerProvider = (props: PropsWithChildren) => {
       audio.volume = 0;
       bar.style.width = 0 + "%";
     } else {
-      audio.volume = volume;
-      bar.style.width = volume * 100 + "%";
+      audio.volume = Math.max(volume, 0.05);
+      bar.style.width = Math.max(volume * 100, 5) + "%";
     }
   }, [isMuted, volume]);
 
