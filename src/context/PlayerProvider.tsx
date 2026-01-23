@@ -96,30 +96,55 @@ const PlayerProvider = (props: PropsWithChildren) => {
     setVolume(percent);
   };
 
+  const calculateSeekPercent = (clientX: number): number => {
+    const container = seekContainerRef.current;
+    if (!container) return 0;
+
+    const rect = container.getBoundingClientRect();
+    const clickX = clientX - rect.left;
+    return Math.min(Math.max(clickX / rect.width, 0), 1);
+  };
+
+  const updateSeekBar = (percent: number): void => {
+    const bar = seekBarRef.current;
+    const audio = audioRef.current;
+    if (!bar || !audio) return;
+
+    const currentTime = percent * audio.duration;
+    const duration = audio.duration;
+
+    bar.style.width = `${(currentTime / duration) * 100}%`;
+    setTime({
+      currentTime: {
+        min: Math.floor(currentTime / 60),
+        sec: Math.floor(currentTime % 60),
+      },
+      totalTime: {
+        min: Math.floor(duration / 60),
+        sec: Math.floor(duration % 60),
+      },
+    });
+  };
+
   const onSeekStartSong = (e: React.MouseEvent<HTMLDivElement>) => {
     setIsSeekingSong(true);
-    seekSong(e.clientX);
+    const percent = calculateSeekPercent(e.clientX);
+    updateSeekBar(percent);
   };
 
   const onSeekMoveSong = (e: MouseEvent) => {
     if (!isSeekingSong) return;
-    seekSong(e.clientX);
+    const percent = calculateSeekPercent(e.clientX);
+    updateSeekBar(percent);
   };
 
-  const onSeekEndSong = () => {
-    setIsSeekingSong(false);
-  };
-
-  const seekSong = (clientX: number): void => {
-    const container = seekContainerRef.current;
+  const onSeekEndSong = (e: MouseEvent) => {
     const audio = audioRef.current;
-    if (!audio || !container) return;
+    if (!audio) return;
 
-    const rect = container.getBoundingClientRect();
-    const clickX = clientX - rect.left;
-    const percent = Math.min(Math.max(clickX / rect.width, 0), 1);
-
+    const percent = calculateSeekPercent(e.clientX);
     audio.currentTime = percent * audio.duration;
+    setIsSeekingSong(false);
   };
 
   // Update Track Source
@@ -194,18 +219,20 @@ const PlayerProvider = (props: PropsWithChildren) => {
       const current = audio.currentTime;
       const duration = isNaN(audio.duration) ? 0 : audio.duration;
 
-      seekBar.style.width = `${(current / duration) * 100}%`;
+      if (!isSeekingSong) {
+        seekBar.style.width = `${(current / duration) * 100}%`;
 
-      setTime({
-        currentTime: {
-          min: Math.floor(current / 60),
-          sec: Math.floor(current % 60),
-        },
-        totalTime: {
-          min: Math.floor(duration / 60),
-          sec: Math.floor(duration % 60),
-        },
-      });
+        setTime({
+          currentTime: {
+            min: Math.floor(current / 60),
+            sec: Math.floor(current % 60),
+          },
+          totalTime: {
+            min: Math.floor(duration / 60),
+            sec: Math.floor(duration % 60),
+          },
+        });
+      }
     };
 
     audio.addEventListener("timeupdate", handleTimeUpdate);
@@ -213,7 +240,7 @@ const PlayerProvider = (props: PropsWithChildren) => {
     return () => {
       audio.removeEventListener("timeupdate", handleTimeUpdate);
     };
-  }, []);
+  }, [isSeekingSong]);
 
   //Immediately Update Total Duration When Song Loaded
   useEffect(() => {
