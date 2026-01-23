@@ -1,7 +1,8 @@
 import { usePlayerContext } from "../../context/PlayerContext.tsx";
 
 const Progress_Bar = () => {
-  const { seekContainerRef, seekBarRef, onSeekStartSong } = usePlayerContext();
+  const { seekContainerRef, seekBarRef, time, onSeekStartSong } =
+    usePlayerContext();
 
   return (
     <div
@@ -14,6 +15,10 @@ const Progress_Bar = () => {
           className="bg-layout relative flex h-full w-0.5 items-center"
           ref={seekBarRef}
         >
+          <div className="bg-surface-secondary/50 pointer-events-none absolute -top-9 -right-6.5 rounded-full px-2.5 text-white opacity-0 transition-opacity duration-100 group-active:opacity-100">
+            {time.currentTime.min}:
+            {String(time.currentTime.sec).padStart(2, "0")}
+          </div>
           <div className="bg-layout absolute -right-1.75 h-3.5 w-3.5 rounded-full opacity-0 group-hover:opacity-100"></div>
         </div>
       </div>
