@@ -4,48 +4,41 @@ import { type Song, song } from "../data/song.ts";
 import * as React from "react";
 
 const PlayerProvider = (props: PropsWithChildren) => {
+  // ==================== REFS ====================
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const seekContainerRef = useRef<HTMLDivElement | null>(null);
   const seekBarRef = useRef<HTMLDivElement | null>(null);
   const volumeContainerRef = useRef<HTMLDivElement | null>(null);
   const volumeBarRef = useRef<HTMLDivElement | null>(null);
 
+  // ==================== STATE ====================
   const [songIndex, setSongIndex] = useState<number>(5);
   const track: Song = song[songIndex];
   const [volume, setVolume] = useState<number>(0.7);
 
+  // Player states
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [isShuffled, setIsShuffled] = useState<boolean>(false);
   const [isLooping, setIsLooping] = useState<boolean>(false);
   const [isMuted, setIsMute] = useState<boolean>(false);
+
+  // Seeking states
   const [isSeekingVolume, setIsSeekingVolume] = useState<boolean>(false);
   const [isSeekingSong, setIsSeekingSong] = useState<boolean>(false);
 
+  // Time tracking
   const [time, setTime] = useState<Time>({
     currentTime: { sec: 0, min: 0 },
     totalTime: { sec: 0, min: 0 },
   });
 
+  // ==================== PLAYBACK FUNCTIONS ====================
   const selectSong = (index: number): void => {
     setSongIndex(index);
     setIsPlaying(true);
   };
 
   const playPause = (): void => setIsPlaying((prev) => !prev);
-
-  const shuffleToggle = (): void => {
-    if (isLooping) {
-      setIsLooping(false);
-    }
-    setIsShuffled((prev) => !prev);
-  };
-
-  const loopToggle = (): void => {
-    if (isShuffled) {
-      setIsShuffled(false);
-    }
-    setIsLooping((prev) => !prev);
-  };
 
   const prev = (): void => {
     setSongIndex((prev) => (prev + song.length - 1) % song.length);
@@ -61,6 +54,22 @@ const PlayerProvider = (props: PropsWithChildren) => {
     }
   };
 
+  // ==================== SHUFFLE & LOOP FUNCTIONS ====================
+  const shuffleToggle = (): void => {
+    if (isLooping) {
+      setIsLooping(false);
+    }
+    setIsShuffled((prev) => !prev);
+  };
+
+  const loopToggle = (): void => {
+    if (isShuffled) {
+      setIsShuffled(false);
+    }
+    setIsLooping((prev) => !prev);
+  };
+
+  // ==================== VOLUME FUNCTIONS ====================
   const muteVolume = (): void => setIsMute((prev) => !prev);
 
   const onSeekStartVolume = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -86,16 +95,13 @@ const PlayerProvider = (props: PropsWithChildren) => {
     const clickX = clientX - rect.left;
     const percent = Math.min(Math.max(clickX / rect.width, 0), 1);
 
-    if (percent === 0) {
-      setIsMute(true);
-    } else {
-      setIsMute(false);
-    }
-
+    // Auto-mute when volume is 0
+    setIsMute(percent === 0);
     audio.volume = percent;
     setVolume(percent);
   };
 
+  // ==================== SONG SEEKING FUNCTIONS ====================
   const calculateSeekPercent = (clientX: number): number => {
     const container = seekContainerRef.current;
     if (!container) return 0;
@@ -147,18 +153,19 @@ const PlayerProvider = (props: PropsWithChildren) => {
     setIsSeekingSong(false);
   };
 
-  // Update Track Source
+  // ==================== EFFECTS ====================
+
+  // Load and play selected track
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
     audio.src = `/assets/songs/${track.source}.mp3`;
     audio.load();
-
     audio.play();
   }, [track]);
 
-  // Update Play and Pause
+  // Sync play/pause state with audio element
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -170,9 +177,10 @@ const PlayerProvider = (props: PropsWithChildren) => {
     }
   }, [isPlaying]);
 
-  // Drag seek volume
+  // Handle volume seeking (drag volume bar)
   useEffect(() => {
     if (!isSeekingVolume) return;
+
     window.addEventListener("mousemove", onSeekMoveVolume);
     window.addEventListener("mouseup", onSeekEndVolume);
 
@@ -182,7 +190,7 @@ const PlayerProvider = (props: PropsWithChildren) => {
     };
   }, [isSeekingVolume]);
 
-  // Update Mute Volume and Volume progress bar
+  // Update audio volume and volume bar
   useEffect(() => {
     const audio = audioRef.current;
     const bar = volumeBarRef.current;
@@ -190,16 +198,17 @@ const PlayerProvider = (props: PropsWithChildren) => {
 
     if (isMuted) {
       audio.volume = 0;
-      bar.style.width = 0 + "%";
+      bar.style.width = "0%";
     } else {
       audio.volume = Math.max(volume, 0.05);
-      bar.style.width = Math.max(volume * 100, 5) + "%";
+      bar.style.width = `${Math.max(volume * 100, 5)}%`;
     }
   }, [isMuted, volume]);
 
-  // Drag seek song
+  // Handle song seeking (drag progress bar)
   useEffect(() => {
     if (!isSeekingSong) return;
+
     window.addEventListener("mousemove", onSeekMoveSong);
     window.addEventListener("mouseup", onSeekEndSong);
 
@@ -209,7 +218,7 @@ const PlayerProvider = (props: PropsWithChildren) => {
     };
   }, [isSeekingSong]);
 
-  // Update Current Time Song And Seek Bar
+  // Update progress bar and time display during playback
   useEffect(() => {
     const audio = audioRef.current;
     const seekBar = seekBarRef.current;
@@ -219,9 +228,9 @@ const PlayerProvider = (props: PropsWithChildren) => {
       const current = audio.currentTime;
       const duration = isNaN(audio.duration) ? 0 : audio.duration;
 
+      // Only update bar if not actively seeking
       if (!isSeekingSong) {
         seekBar.style.width = `${(current / duration) * 100}%`;
-
         setTime({
           currentTime: {
             min: Math.floor(current / 60),
@@ -236,13 +245,10 @@ const PlayerProvider = (props: PropsWithChildren) => {
     };
 
     audio.addEventListener("timeupdate", handleTimeUpdate);
-
-    return () => {
-      audio.removeEventListener("timeupdate", handleTimeUpdate);
-    };
+    return () => audio.removeEventListener("timeupdate", handleTimeUpdate);
   }, [isSeekingSong]);
 
-  //Immediately Update Total Duration When Song Loaded
+  // Update total duration when metadata is loaded
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -261,6 +267,7 @@ const PlayerProvider = (props: PropsWithChildren) => {
     return () => audio.removeEventListener("loadedmetadata", handleLoaded);
   }, []);
 
+  // ==================== CONTEXT VALUE ====================
   const contextValue = {
     track,
     audioRef,
