@@ -13,6 +13,8 @@ const PlayerProvider = (props: PropsWithChildren) => {
 
   // ==================== STATE ====================
   const [songIndex, setSongIndex] = useState<number>(5);
+  const [prevSongs, setPrevSongs] = useState<number[]>([]);
+  const [nextSongs, setNextSongs] = useState<number[]>([]);
   const track: Song = song[songIndex];
   const [volume, setVolume] = useState<number>(0.7);
 
@@ -34,6 +36,8 @@ const PlayerProvider = (props: PropsWithChildren) => {
 
   // ==================== PLAYBACK FUNCTIONS ====================
   const selectSong = (index: number): void => {
+    setPrevSongs([]);
+    setNextSongs([]);
     setSongIndex(index);
     setIsPlaying(true);
   };
@@ -41,17 +45,43 @@ const PlayerProvider = (props: PropsWithChildren) => {
   const playPause = (): void => setIsPlaying((prev) => !prev);
 
   const prev = (): void => {
-    setSongIndex((prev) => (prev + song.length - 1) % song.length);
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    setNextSongs((prev) => [...prev, songIndex]);
+
+    if (isShuffled && prevSongs.length > 0) {
+      setPrevSongs((prev) => {
+        const lastIndex = prev.at(-1)!;
+        setSongIndex(lastIndex);
+
+        return prev.slice(0, -1);
+      });
+    } else if (isShuffled) {
+      audio.currentTime = 0;
+    } else {
+      setSongIndex((prev) => (prev + song.length - 1) % song.length);
+    }
     setIsPlaying(true);
   };
 
   const next = (): void => {
-    if (isShuffled) {
-      console.log("shuffle");
+    setPrevSongs((prev) => [...prev, songIndex]);
+
+    if (isShuffled && nextSongs.length > 0) {
+      setNextSongs((prev) => {
+        const lastIndex = prev.at(-1)!;
+        setSongIndex(lastIndex);
+
+        return prev.slice(0, -1);
+      });
+    } else if (isShuffled) {
+      const randomNext = Math.min(Math.floor(Math.random() * 10), 5);
+      setSongIndex((prev) => (prev + song.length + randomNext) % song.length);
     } else {
       setSongIndex((prev) => (prev + song.length + 1) % song.length);
-      setIsPlaying(true);
     }
+    setIsPlaying(true);
   };
 
   // ==================== SHUFFLE & LOOP FUNCTIONS ====================
@@ -60,6 +90,8 @@ const PlayerProvider = (props: PropsWithChildren) => {
       setIsLooping(false);
     }
     setIsShuffled((prev) => !prev);
+    setPrevSongs([]);
+    setNextSongs([]);
   };
 
   const loopToggle = (): void => {
