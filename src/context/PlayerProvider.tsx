@@ -48,21 +48,27 @@ const PlayerProvider = (props: PropsWithChildren) => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    setNextSongs((prev) => [...prev, songIndex]);
+    // If current time <= 5 seconds, go to previous track
+    if (audio.currentTime <= 5) {
+      setNextSongs((prev) => [...prev, songIndex]);
 
-    if (isShuffled && prevSongs.length > 0) {
-      setPrevSongs((prev) => {
-        const lastIndex = prev.at(-1)!;
-        setSongIndex(lastIndex);
+      if (isShuffled && prevSongs.length > 0) {
+        setPrevSongs((prev) => {
+          const lastIndex = prev.at(-1)!;
+          setSongIndex(lastIndex);
 
-        return prev.slice(0, -1);
-      });
-    } else if (isShuffled) {
-      audio.currentTime = 0;
+          return prev.slice(0, -1);
+        });
+      } else if (isShuffled) {
+        audio.currentTime = 0;
+      } else {
+        setSongIndex((prev) => (prev + song.length - 1) % song.length);
+      }
+      setIsPlaying(true);
     } else {
-      setSongIndex((prev) => (prev + song.length - 1) % song.length);
+      // If current time > 5 seconds, reset song duration to 0
+      audio.currentTime = 0;
     }
-    setIsPlaying(true);
   };
 
   const next = (): void => {
