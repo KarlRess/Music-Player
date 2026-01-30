@@ -35,8 +35,13 @@ const SongCard = ({ song }: { song: Song }) => {
         <div className="cursor-pointer overflow-hidden font-semibold text-ellipsis whitespace-nowrap hover:underline">
           {song.name}
         </div>
-        <div className="text-text-secondary h-auto cursor-pointer flex-wrap text-xs hover:underline">
-          {song.artist.join(", ")}
+        <div className="text-text-secondary h-auto cursor-pointer flex-wrap text-xs">
+          {song.artist.map((artist, index) => (
+            <span key={index} className="hover:underline">
+              {artist}
+              {index < song.artist.length - 1 && ", "}
+            </span>
+          ))}
         </div>
       </div>
     </div>
